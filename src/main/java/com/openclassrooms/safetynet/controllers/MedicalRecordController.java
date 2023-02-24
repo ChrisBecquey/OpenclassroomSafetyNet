@@ -1,17 +1,11 @@
 package com.openclassrooms.safetynet.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.safetynet.models.MedicalRecord;
-import com.openclassrooms.safetynet.models.Person;
 import com.openclassrooms.safetynet.services.MedicalRecordService;
 import com.openclassrooms.safetynet.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class MedicalRecordController {

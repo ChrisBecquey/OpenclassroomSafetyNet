@@ -2,19 +2,14 @@ package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.models.Firestation;
-import com.openclassrooms.safetynet.models.MedicalRecord;
-import com.openclassrooms.safetynet.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.Year;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UtilsService {
+public class SafetyNetService {
     @Autowired
     private PersonService personService;
     @Autowired
