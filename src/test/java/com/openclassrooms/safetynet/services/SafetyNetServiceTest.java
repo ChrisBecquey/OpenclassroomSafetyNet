@@ -5,14 +5,12 @@ import com.openclassrooms.safetynet.DTO.PhoneAlertDTO;
 import com.openclassrooms.safetynet.models.Firestation;
 import com.openclassrooms.safetynet.models.MedicalRecord;
 import com.openclassrooms.safetynet.models.Person;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,9 +19,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class UtilsServiceTest {
+class SafetyNetServiceTest {
     @InjectMocks
-    UtilsService utilsService;
+    SafetyNetService safetyNetService;
 
     @Mock
     PersonService personService;
@@ -61,7 +59,7 @@ class UtilsServiceTest {
         persons.add(person2);
 
         when(personService.getPersonsByCity(any())).thenReturn(persons);
-        List<CommunityEmailDTO> emailList = utilsService.getEmailFromAllPersonInACity("Toulouse");
+        List<CommunityEmailDTO> emailList = safetyNetService.getEmailFromAllPersonInACity("Toulouse");
         assertEquals(2, emailList.size());
         assertTrue(emailList.get(0).getEmail().equals("Albert.dupont@gmail.com"));
 
@@ -97,7 +95,7 @@ class UtilsServiceTest {
         when(firestationService.getFirestationByNumber(anyInt())).thenReturn(firestations);
         when(personService.getPersonsByAdress(any())).thenReturn(persons);
 
-        List<PhoneAlertDTO> phoneNumberList = utilsService.getPhoneNumber(1);
+        List<PhoneAlertDTO> phoneNumberList = safetyNetService.getPhoneNumber(1);
         assertEquals(2, phoneNumberList.size());
         assertTrue(phoneNumberList.get(0).getPhone().equals("777-555-1122"));
 

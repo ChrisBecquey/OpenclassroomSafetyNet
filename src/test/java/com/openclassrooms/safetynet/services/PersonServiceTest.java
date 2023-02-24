@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 @SpringBootTest
@@ -57,6 +55,12 @@ class PersonServiceTest {
     }
 
     @Test
+    void findAll() {
+        when(databaseService.getPersons()).thenReturn(persons);
+        List<Person> allPersons = personService.findAll();
+        assertEquals(3, allPersons.size());
+    }
+    @Test
     void getPersonsByLastName() {
         when(databaseService.getPersons()).thenReturn(persons);
         List<Person> listTest= personService.getPersonsByLastName("Dupont");
@@ -67,10 +71,9 @@ class PersonServiceTest {
     @Test
     void getPersonByFirstAndLastName() {
         when(databaseService.getPersons()).thenReturn(persons);
-        List<Person> listTest = personService.getPersonByFirstAndLastName("Lambert", "Jeanne");
-        assertEquals(1, listTest.size());
-        assertTrue(listTest.get(0).getLastName().equals("Lambert"));
-        assertTrue(listTest.get(0).getFirstName().equals("Jeanne"));
+        Person jeanneLambert = personService.getPersonByFirstAndLastName("Jeanne", "Lambert");
+        assertTrue(jeanneLambert.getLastName().equals("Lambert"));
+        assertTrue(jeanneLambert.getFirstName().equals("Jeanne"));
     }
     @Test
     void getPersonsByAdress() {
@@ -98,7 +101,15 @@ class PersonServiceTest {
         personTest.setZip("31000");
         personTest.setCity("Toulouse");
 
-        personService.add(personTest);
+        personService.save(personTest);
         assertEquals(4, databaseService.getPersons().size());
+    }
+
+    @Test
+    void removePerson() {
+        when(databaseService.getPersons()).thenReturn(persons);
+        Person personToRemove = personService.getPersonByFirstAndLastName("Jeanne", "Lambert");
+        personService.delete(personToRemove);
+        assertEquals(2, databaseService.getPersons().size());
     }
 }
