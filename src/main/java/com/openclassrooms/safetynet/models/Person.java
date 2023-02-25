@@ -1,5 +1,8 @@
 package com.openclassrooms.safetynet.models;
 
+
+import java.util.Objects;
+
 public class Person {
     private String firstName;
     private String lastName;
@@ -63,5 +66,17 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person person)) return false;
+        return firstName.equals(person.firstName) && lastName.equals(person.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
     }
 }
