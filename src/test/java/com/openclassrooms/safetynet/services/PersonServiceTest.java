@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+
 @SpringBootTest
 class PersonServiceTest {
     @InjectMocks
@@ -60,21 +61,22 @@ class PersonServiceTest {
         List<Person> allPersons = personService.findAll();
         assertEquals(3, allPersons.size());
     }
+
     @Test
     void getPersonsByLastName() {
         when(databaseService.getPersons()).thenReturn(persons);
-        List<Person> listTest= personService.getPersonsByLastName("Dupont");
+        List<Person> listTest = personService.getPersonsByLastName("Dupont");
         assertEquals(1, listTest.size());
-        assertTrue(listTest.get(0).getLastName().equals("Dupont"));
+        assertEquals("Dupont", listTest.get(0).getLastName());
     }
 
     @Test
-    void getPersonByFirstAndLastName() {
+    void shouldEmptyList_whenNoPersonWithThisLastName() {
         when(databaseService.getPersons()).thenReturn(persons);
-        Person jeanneLambert = personService.getPersonByFirstAndLastName("Jeanne", "Lambert");
-        assertTrue(jeanneLambert.getLastName().equals("Lambert"));
-        assertTrue(jeanneLambert.getFirstName().equals("Jeanne"));
+        List<Person> listTest = personService.getPersonsByLastName("Loic");
+        assertEquals(0, listTest.size());
     }
+
     @Test
     void getPersonsByAdress() {
         when(databaseService.getPersons()).thenReturn(persons);
@@ -112,4 +114,33 @@ class PersonServiceTest {
         personService.delete(personToRemove);
         assertEquals(2, databaseService.getPersons().size());
     }
+
+    @Test
+    void updatePerson() {
+        when(databaseService.getPersons()).thenReturn(persons);
+        Person personToUpdate = personService.getPersonByFirstAndLastName("Jeanne", "Lambert");
+        personToUpdate.setEmail("j.lambert@ymail.com");
+        personToUpdate.setPhone("888-999-888");
+        personService.update(personToUpdate);
+        assertEquals(3, databaseService.getPersons().size());
+        assertEquals("j.lambert@ymail.com", databaseService.getPersons().get(2).getEmail());
+        assertEquals("888-999-888", databaseService.getPersons().get(2).getPhone());
+    }
+
+    @Test
+    void shouldReturnNull_whenPersonIsNotFound() {
+        when(databaseService.getPersons()).thenReturn(persons);
+        Person notFound = personService.getPersonByFirstAndLastName("toto", "tati");
+        assertNull(notFound);
+
+    }
+
+    @Test
+    void getPersonByFirstAndLastName() {
+        when(databaseService.getPersons()).thenReturn(persons);
+        Person jeanneLambert = personService.getPersonByFirstAndLastName("Jeanne", "Lambert");
+        assertEquals("Lambert", jeanneLambert.getLastName());
+        assertEquals("Jeanne", jeanneLambert.getFirstName());
+    }
+
 }

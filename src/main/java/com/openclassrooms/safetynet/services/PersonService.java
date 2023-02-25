@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +29,7 @@ public class PersonService {
                 .reduce((a, b) -> {
                     throw  new IllegalStateException("Multiple elements: " + a + "," + b);
                 })
-                .get();
+                .orElse(null);
     }
     public List<Person> getPersonsByAdress(String adress) {
         return databaseService.getPersons().stream()
@@ -53,5 +52,12 @@ public class PersonService {
         databaseService.getPersons().remove(person);
         return true;
     }
+
+    public Person update(Person person) {
+        int index = databaseService.getPersons().indexOf(getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()));
+        return databaseService.getPersons().set(index, person);
+    }
+
+
 
 }

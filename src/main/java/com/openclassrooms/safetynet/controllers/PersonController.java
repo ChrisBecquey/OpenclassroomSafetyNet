@@ -31,22 +31,13 @@ public class PersonController {
     }
 
     @PutMapping("/person")
-    public Boolean updatePerson(@RequestParam String firstName, String lastName, @RequestBody Person person) {
-        Person existingPerson = personService.getPersonByFirstAndLastName(firstName, lastName);
-        existingPerson.setFirstName(person.getFirstName());
-        existingPerson.setLastName(person.getLastName());
-        existingPerson.setAddress(person.getAddress());
-        existingPerson.setCity(person.getCity());
-        existingPerson.setZip(person.getZip());
-        existingPerson.setPhone(person.getPhone());
-        existingPerson.setEmail(person.getEmail());
-        return personService.save(existingPerson); //pb sur retour postman pbbmtn mauvaise méthode de retour on retrouve 2 Pauline => Problème
+    public Person updatePerson(@RequestBody Person person) {
+        return personService.update(person); //pb sur retour postman pbbmtn mauvaise méthode de retour on retrouve 2 Pauline => Problème
     }
 
     @DeleteMapping("/person")
     public Boolean detetePerson(@RequestParam String firstName, String lastName) {
-        Person existingPerson = personService.getPersonByFirstAndLastName(firstName, lastName);
-        return personService.delete(existingPerson);
+        return personService.delete(personService.getPersonByFirstAndLastName(firstName, lastName));
     }
 }
 
