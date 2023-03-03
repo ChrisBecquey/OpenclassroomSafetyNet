@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynet.controllers;
 
 import com.openclassrooms.safetynet.models.Person;
-import com.openclassrooms.safetynet.services.FirestationService;
 import com.openclassrooms.safetynet.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +11,6 @@ import java.util.List;
 public class PersonController {
     @Autowired
     PersonService personService;
-    @Autowired
-    FirestationService firestationService;
 
     @GetMapping(value = "/persons")
     public List<Person> getAllPersons() {
@@ -32,7 +29,7 @@ public class PersonController {
 
     @PutMapping("/person")
     public Person updatePerson(@RequestBody Person person) {
-        return personService.update(person); //pb sur retour postman pbbmtn mauvaise méthode de retour on retrouve 2 Pauline => Problème
+        return personService.update(person);
     }
 
     @DeleteMapping("/person")

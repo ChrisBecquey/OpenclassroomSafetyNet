@@ -36,17 +36,24 @@ class FirestationServiceTest {
 
         Firestation firestation3 = new Firestation();
         firestation3.setAddress("112 Steppes Pl");
-        firestation3.setStation(3);
+        firestation3.setStation(1);
         firestations.add(firestation3);
     }
 
     @Test
     void getFirestationByNumber() {
         when(databaseService.getFirestations()).thenReturn(firestations);
-        List<Firestation> firestationListByNumber = firestationService.getFirestationByNumber(1);
+        List<Firestation> firestationListByNumber = firestationService.getFirestationByNumber(2);
         assertEquals(1, firestationListByNumber.size());
     }
 
+    @Test
+    void getFirestationByNumberAndAdress() {
+        when(databaseService.getFirestations()).thenReturn(firestations);
+        Firestation firestation1 = firestationService.getFirestationByNumberAndAdress(1, "1509 Culver St");
+        assertEquals(1, firestation1.getStation());
+        assertEquals("1509 Culver St", firestation1.getAddress());
+    }
     @Test
     void getAllFirestations() {
         when(databaseService.getFirestations()).thenReturn(firestations);
@@ -64,5 +71,24 @@ class FirestationServiceTest {
         firestationService.addFirestation(firestationToAdd);
         assertEquals(4, databaseService.getFirestations().size());
         assertTrue(databaseService.getFirestations().get(3).getAddress().equals("89 Rue du Pont"));
+    }
+
+    @Test
+    void deleteFirestation() {
+        when(databaseService.getFirestations()).thenReturn(firestations);
+        Firestation firestationToDelete = firestationService.getFirestationByNumberAndAdress(1, "1509 Culver St");
+        firestationService.deleteFirestation(firestationToDelete);
+        assertEquals(2, databaseService.getFirestations().size());
+    }
+
+    @Test
+    void updateFirestation() {
+        when(databaseService.getFirestations()).thenReturn(firestations);
+        Firestation firestationToUpdate = firestationService.getFirestationByNumberAndAdress(1, "1509 Culver St");
+        firestationToUpdate.setStation(5);
+
+        firestationService.updateFirestation(firestationToUpdate);
+        assertEquals(5, databaseService.getFirestations().get(0).getStation());
+        assertEquals(3, databaseService.getFirestations().size());
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -19,7 +18,7 @@ public class PersonService {
     public List<Person> getPersonsByLastName(String lastName) {
         return databaseService.getPersons().stream()
                 .filter(person -> person.getLastName().equals(lastName))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Person getPersonByFirstAndLastName(String firstName, String lastName) {
@@ -34,18 +33,18 @@ public class PersonService {
     public List<Person> getPersonsByAdress(String adress) {
         return databaseService.getPersons().stream()
                 .filter(person -> person.getAddress().equals(adress))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Person> getPersonsByCity(String city) {
         return databaseService.getPersons().stream()
                 .filter(person -> person.getCity().equals(city))
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public Boolean save(Person person) {   //thrown ==> Exception si bien passé on renvoie qqch / autrement
+    public Boolean save(Person person) {
         databaseService.getPersons().add(person);
-        return true; //vérifier qu'on est pas 2 fois la meme personne. (Meme nom / prenom)
+        return true;
     }
 
     public Boolean delete(Person person) {

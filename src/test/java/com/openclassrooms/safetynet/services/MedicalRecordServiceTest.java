@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.print.attribute.standard.Media;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,6 +79,12 @@ class MedicalRecordServiceTest {
     }
 
     @Test
+    void getAllMedicalRecords() {
+        when(databaseService.getMedicalRecords()).thenReturn(medicalRecords);
+        List<MedicalRecord> allMedicalRecords = medicalRecordService.findAll();
+        assertEquals(3, allMedicalRecords.size());
+    }
+    @Test
     void getMedicalRecordsForChild() throws ParseException {
         when(databaseService.getMedicalRecords()).thenReturn(medicalRecords);
         List<MedicalRecord> childMedicalRecords = medicalRecordService.getMedicalRecordsForChild();
@@ -113,5 +120,30 @@ class MedicalRecordServiceTest {
         assertEquals(4, medicalRecords.size());
         assertTrue(databaseService.getMedicalRecords().get(3).getFirstName().equals("Louise"));
         assertTrue(databaseService.getMedicalRecords().get(3).getLastName().equals("Dubois"));
+    }
+
+    @Test
+    void getMedicalRecordFromFirstAndLastName() {
+        when(databaseService.getMedicalRecords()).thenReturn(medicalRecords);
+        MedicalRecord medicalRecord1 = medicalRecordService.getMedicalRecordFromFirstAndLastName("Louis", "Boyd");
+        assertEquals("03/06/2010", medicalRecord1.getBirthdate());
+        assertEquals("Louis", medicalRecord1.getFirstName());
+    }
+
+    @Test
+    void updateMedicalRecord() {
+        when(databaseService.getMedicalRecords()).thenReturn(medicalRecords);
+        MedicalRecord medicalRecordToUpdate = medicalRecordService.getMedicalRecordFromFirstAndLastName("Louis", "Boyd");
+        medicalRecordToUpdate.setBirthdate("08/12/2005");
+        List<String> allergies = new ArrayList<>();
+        List<String> listAllergies = Arrays.asList("peanut", "almond", "sugar");
+        allergies.addAll(listAllergies);
+        medicalRecordToUpdate.setAllergies(allergies);
+
+        medicalRecordService.updateMedicalRecord(medicalRecordToUpdate);
+
+        assertEquals(3, medicalRecords.size());
+        assertEquals("08/12/2005", databaseService.getMedicalRecords().get(0).getBirthdate());
+        assertEquals(allergies, databaseService.getMedicalRecords().get(0).getAllergies());
     }
 }
