@@ -18,6 +18,13 @@ public class FirestationService {
                 .collect(Collectors.toList());
     }
 
+    public Firestation getFirestationByNumberAndAdress(int number, String adress) {
+        return databaseService.getFirestations()
+                .stream()
+                .filter(station -> station.getStation() == number && station.getAddress().equals(adress))
+                .toList()
+                .get(0);
+    }
     public List<Firestation> getAllFirestations() {
         return databaseService.getFirestations();
     }
@@ -25,5 +32,15 @@ public class FirestationService {
     public Boolean addFirestation(Firestation firestation) {
         databaseService.getFirestations().add(firestation);
         return true;
+    }
+
+    public Boolean deleteFirestation(Firestation firestation) {
+        databaseService.getFirestations().remove(firestation);
+        return true;
+    }
+
+    public Firestation updateFirestation(Firestation firestation) {
+        int index = databaseService.getFirestations().indexOf(getFirestationByNumberAndAdress(firestation.getStation(), firestation.getAddress()));
+        return databaseService.getFirestations().set(index, firestation);
     }
 }

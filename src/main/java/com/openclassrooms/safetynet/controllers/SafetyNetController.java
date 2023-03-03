@@ -26,5 +26,4 @@ public class SafetyNetController {
         return safetyNetService.getPhoneNumber(firestation);
     }
 
-
 }
