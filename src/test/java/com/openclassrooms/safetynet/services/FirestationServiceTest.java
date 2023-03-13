@@ -84,10 +84,11 @@ class FirestationServiceTest {
     @Test
     void updateFirestation() {
         when(databaseService.getFirestations()).thenReturn(firestations);
-        Firestation firestationToUpdate = firestationService.getFirestationByNumberAndAdress(1, "1509 Culver St");
+        Firestation firestationToUpdate = new Firestation();
+        firestationToUpdate.setAddress("1509 Culver St");
         firestationToUpdate.setStation(5);
 
-        firestationService.updateFirestation(firestationToUpdate);
+        firestationService.updateFirestation(1, "1509 Culver St", firestationToUpdate);
         assertEquals(5, databaseService.getFirestations().get(0).getStation());
         assertEquals(3, databaseService.getFirestations().size());
     }

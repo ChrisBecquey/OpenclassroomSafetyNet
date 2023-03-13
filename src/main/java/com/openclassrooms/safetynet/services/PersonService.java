@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.models.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +10,7 @@ import java.util.List;
 
 @Service
 public class PersonService {
-
+    Logger logger = LoggerFactory.getLogger(PersonService.class);
     @Autowired
     private DatabaseService databaseService;
 
@@ -16,6 +18,7 @@ public class PersonService {
         return databaseService.getPersons();
     }
     public List<Person> getPersonsByLastName(String lastName) {
+        logger.info("Entré dans la méthode");
         return databaseService.getPersons().stream()
                 .filter(person -> person.getLastName().equals(lastName))
                 .toList();
@@ -43,8 +46,11 @@ public class PersonService {
     }
 
     public Boolean save(Person person) {
-        databaseService.getPersons().add(person);
-        return true;
+        if (this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) == null) {
+            databaseService.getPersons().add(person);
+            return true;
+        }
+        return false;
     }
 
     public Boolean delete(Person person) {
@@ -57,6 +63,6 @@ public class PersonService {
         return databaseService.getPersons().set(index, person);
     }
 
-
+// ajouter les actuators
 
 }

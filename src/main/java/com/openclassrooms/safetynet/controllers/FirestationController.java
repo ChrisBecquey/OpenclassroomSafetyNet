@@ -5,7 +5,9 @@ import com.openclassrooms.safetynet.models.Person;
 import com.openclassrooms.safetynet.services.FirestationService;
 import com.openclassrooms.safetynet.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,13 +35,15 @@ public class FirestationController {
         return firestationService.getFirestationByNumberAndAdress(number, adress);
     }
     @PostMapping("/firestation")
-    public void saveFirestation(@RequestBody Firestation firestation) {
-        firestationService.addFirestation(firestation);
+    public ResponseEntity<String> saveFirestation(@RequestBody Firestation firestation) {
+        if(firestationService.addFirestation(firestation))
+            return ResponseEntity.status(HttpStatus.CREATED).body("Firestation created");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Firestation already exist");
     }
 
     @PutMapping("/firestation")
-    public Firestation updateFirestation(@RequestBody Firestation firestation) {
-        return firestationService.updateFirestation(firestation);
+    public Firestation updateFirestation(@RequestParam int number, String adress, @RequestBody Firestation firestation) {
+        return firestationService.updateFirestation(number, adress, firestation);
     }
 
     @DeleteMapping("/firestation")

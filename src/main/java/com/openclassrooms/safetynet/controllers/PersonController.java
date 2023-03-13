@@ -3,6 +3,8 @@ package com.openclassrooms.safetynet.controllers;
 import com.openclassrooms.safetynet.models.Person;
 import com.openclassrooms.safetynet.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +25,10 @@ public class PersonController {
     }
 
     @PostMapping(value = "/person")
-    public void savePerson(@RequestBody Person person) {
-        personService.save(person);
+    public ResponseEntity<String> savePerson(@RequestBody Person person) {
+        if(personService.save(person))
+            return ResponseEntity.status(HttpStatus.CREATED).body("Person created");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Person already exist");
     }
 
     @PutMapping("/person")

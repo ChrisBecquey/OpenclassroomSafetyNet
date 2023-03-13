@@ -39,8 +39,9 @@ public class FirestationService {
         return true;
     }
 
-    public Firestation updateFirestation(Firestation firestation) {
-        int index = databaseService.getFirestations().indexOf(getFirestationByNumberAndAdress(firestation.getStation(), firestation.getAddress()));
-        return databaseService.getFirestations().set(index, firestation);
+    public Firestation updateFirestation(int number, String adress, Firestation firestation) {
+        int index = databaseService.getFirestations().indexOf(getFirestationByNumberAndAdress(number, adress));
+        Firestation test =  databaseService.getFirestations().set(index, firestation);
+        return test;
     }
 }
