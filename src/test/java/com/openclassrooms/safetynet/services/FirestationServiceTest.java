@@ -88,7 +88,7 @@ class FirestationServiceTest {
         firestationToUpdate.setAddress("1509 Culver St");
         firestationToUpdate.setStation(5);
 
-        firestationService.updateFirestation(1, "1509 Culver St", firestationToUpdate);
+        firestationService.updateFirestation(firestationToUpdate);
         assertEquals(5, databaseService.getFirestations().get(0).getStation());
         assertEquals(3, databaseService.getFirestations().size());
     }

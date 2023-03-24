@@ -62,7 +62,4 @@ public class PersonService {
         int index = databaseService.getPersons().indexOf(getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()));
         return databaseService.getPersons().set(index, person);
     }
-
-// ajouter les actuators
-
 }

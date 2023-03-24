@@ -20,11 +20,6 @@ public class FirestationController {
     @Autowired
     private PersonService personService;
 
-    @GetMapping(value = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> getPersonsInFirestationRange(@RequestParam int station) {
-        List<Firestation> firestationsByNumber = firestationService.getFirestationByNumber(station);
-        return new ArrayList<>(personService.getPersonsByAdress(firestationsByNumber.get(0).getAddress()));
-    }
     @GetMapping("/firestations")
     public List<Firestation> getAllFirestations() {
         return firestationService.getAllFirestations();
@@ -42,8 +37,8 @@ public class FirestationController {
     }
 
     @PutMapping("/firestation")
-    public Firestation updateFirestation(@RequestParam int number, String adress, @RequestBody Firestation firestation) {
-        return firestationService.updateFirestation(number, adress, firestation);
+    public Firestation updateFirestation(@RequestBody Firestation firestation) {
+        return firestationService.updateFirestation(firestation);
     }
 
     @DeleteMapping("/firestation")

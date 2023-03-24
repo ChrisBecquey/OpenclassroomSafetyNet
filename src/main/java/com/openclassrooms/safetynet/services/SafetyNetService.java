@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.models.Firestation;
+import com.openclassrooms.safetynet.models.MedicalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class SafetyNetService {
     private PersonService personService;
     @Autowired
     private FirestationService firestationService;
+
+    @Autowired
+    private DatabaseService databaseService;
 
     private MedicalRecordService medicalRecordService;
 
@@ -35,36 +39,36 @@ public class SafetyNetService {
                 .collect(Collectors.toList());
     }
 
-//    public List<Person> getPersonsInFirestationRange(int station) {
-//        List<Firestation> firestations = firestationService.getFirestationByNumber(station);
-//        return firestations.
-//                stream()
-//                .flatMap(f -> personService.getPersonsByAdress(f.getAddress())
-//                        .stream()
-//                        .map(p ->
-//                                        new FirestationDTO(new PersonDTO(p.getFirstName(), p.getLastName(), p.getAddress(), p.getPhone()), ),
-//                                ))
-//    }
 
+    public FirestationDTO findPersonsByStationNumber(int stationNumber) {
+        FirestationDTO firestationDTO = new FirestationDTO();
+        List<Firestation> firestations = firestationService.getFirestationByNumber(stationNumber);
+        List<PersonDTO> persons = firestations
+                .stream()
+                .flatMap(f -> personService.getPersonsByAdress(f.getAddress())
+                        .stream()
+                        .map(p -> new PersonDTO(p.getFirstName(), p.getLastName(), p.getAddress(), p.getPhone()))
+                        .distinct())
+                .toList();
 
+        List<MedicalRecord> medicals = persons
+                .stream()
+                .map(p -> medicalRecordService.getMedicalRecordFromFirstAndLastName(p.getFirstName(), p.getLastName()))
+                .toList();
+
+        List<MedicalRecord> childs = medicals
+                .stream()
+                .flatMap(p -> medicalRecordService.getMedicalRecordsForChild()
+                        .stream()
+                        .distinct())
+                .toList();
+
+        int child = childs.size();
+        int adult = persons.size() - child;
+
+        firestationDTO.setPersonDTOS(persons);
+        firestationDTO.setAdult(adult);
+        firestationDTO.setChild(child);
+        return firestationDTO;
+    }
 }
-
-
-//    public int getAge() {
-//        List<MedicalRecord> medicalRecords = medicalRecordService.getMedicalRecordsForChild();
-//        LocalDate today = LocalDate.now();
-//
-//
-//        return medicalRecords
-//                .stream()
-//                .map(m -> Period.between(LocalDate.parse(m.getBirthdate()), LocalDate.now()).getYears())
-//                .collect();
-//    }
-//    public List<ChildAlertDTO> getChildInformationAtTheAdress(String adress) {
-//        List<Person> persons = personService.getPersonsByAdress(adress);
-//        return persons
-//                .stream()
-//                .flatMap(p -> medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild(p.getFirstName(), p.getLastName())
-//                        .stream()
-//                        .map(m -> new ChildAlertDTO(m.getFirstName(), m.getLastName(), Period.between(LocalDate.parse(m.getBirthdate(), LocalDate.now()).getYear()))))
-//    }

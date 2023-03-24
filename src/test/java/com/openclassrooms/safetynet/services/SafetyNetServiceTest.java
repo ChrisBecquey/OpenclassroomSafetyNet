@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.DTO.CommunityEmailDTO;
+import com.openclassrooms.safetynet.DTO.FirestationDTO;
+import com.openclassrooms.safetynet.DTO.PersonDTO;
 import com.openclassrooms.safetynet.DTO.PhoneAlertDTO;
 import com.openclassrooms.safetynet.models.Firestation;
 import com.openclassrooms.safetynet.models.MedicalRecord;
@@ -11,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,6 +104,74 @@ class SafetyNetServiceTest {
 
     }
 
+    @Test
+    void getPersonsInRangeOfFirestation() {
+        Firestation firestation = new Firestation();
+        firestation.setAddress("12 rue du pont");
+        firestation.setStation(1);
+        firestations.add(firestation);
+
+        Person person1 = new Person();
+        person1.setFirstName("Albert");
+        person1.setLastName("Lambert");
+        person1.setAddress("12 rue du pont");
+        person1.setEmail("Albert.dupont@gmail.com");
+        person1.setPhone("777-555-1122");
+        person1.setZip("31000");
+        person1.setCity("Toulouse");
+        persons.add(person1);
+
+        Person person2 = new Person();
+        person2.setFirstName("Jeanne");
+        person2.setLastName("Lambert");
+        person2.setAddress("12 rue du pont");
+        person2.setEmail("Jeanne.lambert@gmail.com");
+        person2.setPhone("999-555-1133");
+        person2.setZip("31000");
+        person2.setCity("Toulouse");
+        persons.add(person2);
+
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setFirstName("Albert");
+        medicalRecord1.setLastName("Lambert");
+        medicalRecord1.setBirthdate("03/06/2010");
+        List<String> medications1 = new ArrayList<>();
+        List<String> listMedications1 = Arrays.asList("aznol:350mg", "hydrapermazol:100mg");
+        medications1.addAll(listMedications1);
+        medicalRecord1.setMedications(medications1);
+        List<String> allergies1 = new ArrayList<>();
+        List<String> listAllergies1 = Arrays.asList("peanut", "shellfish", "aznol");
+        allergies1.addAll(listAllergies1);
+        medicalRecord1.setAllergies(allergies1);
+
+        medicalRecords.add(medicalRecord1);
+
+        MedicalRecord medicalRecord2 = new MedicalRecord();
+        medicalRecord2.setFirstName("Jeanne");
+        medicalRecord2.setLastName("Lambert");
+        medicalRecord2.setBirthdate("03/06/1998");
+        List<String> medications2 = new ArrayList<>();
+        List<String> listMedications2 = Arrays.asList("aznol:350mg", "hydrapermazol:100mg");
+        medications2.addAll(listMedications2);
+        medicalRecord2.setMedications(medications2);
+        List<String> allergies2 = new ArrayList<>();
+        List<String> listAllergies2 = Arrays.asList("peanut", "shellfish", "aznol");
+        allergies2.addAll(listAllergies2);
+        medicalRecord2.setAllergies(allergies2);
+
+        medicalRecords.add(medicalRecord2);
+
+
+
+        when(personService.getPersonsByAdress(any())).thenReturn(persons);
+        when(firestationService.getFirestationByNumber(anyInt())).thenReturn(firestations);
+        when(medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild(any(), any())).thenReturn(medicalRecords);
+
+        FirestationDTO firestationDTO = safetyNetService.findPersonsByStationNumber(1);
+        assertEquals(firestationDTO.getPersonDTOS().size(), 2);
+        assertEquals(firestationDTO.getChild(), 1);
+        assertEquals(firestationDTO.getAdult(), 1);
+    }
 //    @Test
 //    void getChildInformationsAtTheAdress() {
 //        // Renvoyer une liste d'enfant habitant à l'adresse (prénom + nom + age + liste des autres membres du foyer (persons))

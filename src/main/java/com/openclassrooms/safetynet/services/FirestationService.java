@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.models.Firestation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class FirestationService {
 
+    Logger logger = LoggerFactory.getLogger(FirestationService.class);
     @Autowired
     DatabaseService databaseService;
 
@@ -39,9 +42,12 @@ public class FirestationService {
         return true;
     }
 
-    public Firestation updateFirestation(int number, String adress, Firestation firestation) {
-        int index = databaseService.getFirestations().indexOf(getFirestationByNumberAndAdress(number, adress));
-        Firestation test =  databaseService.getFirestations().set(index, firestation);
-        return test;
+    public Firestation updateFirestation(Firestation firestation) {
+        databaseService.getFirestations().forEach(f -> {
+            if (f.getAddress().equals(firestation.getAddress())){
+                f.setStation(firestation.getStation());
+            }
+        });
+        return firestation;
     }
 }
