@@ -19,6 +19,7 @@ public class SafetyNetService {
     @Autowired
     private DatabaseService databaseService;
 
+    @Autowired
     private MedicalRecordService medicalRecordService;
 
     public List<CommunityEmailDTO> getEmailFromAllPersonInACity(String city) {
@@ -51,16 +52,11 @@ public class SafetyNetService {
                         .distinct())
                 .toList();
 
-        List<MedicalRecord> medicals = persons
+        List<MedicalRecord> childs = persons
                 .stream()
-                .map(p -> medicalRecordService.getMedicalRecordFromFirstAndLastName(p.getFirstName(), p.getLastName()))
-                .toList();
-
-        List<MedicalRecord> childs = medicals
-                .stream()
-                .flatMap(p -> medicalRecordService.getMedicalRecordsForChild()
-                        .stream()
-                        .distinct())
+                .flatMap(p -> medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild(p.getFirstName(), p.getLastName())
+                        .stream())
+                .distinct()
                 .toList();
 
         int child = childs.size();
@@ -71,4 +67,5 @@ public class SafetyNetService {
         firestationDTO.setChild(child);
         return firestationDTO;
     }
+
 }

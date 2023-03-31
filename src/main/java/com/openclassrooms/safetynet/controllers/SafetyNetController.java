@@ -3,7 +3,6 @@ package com.openclassrooms.safetynet.controllers;
 import com.openclassrooms.safetynet.DTO.CommunityEmailDTO;
 import com.openclassrooms.safetynet.DTO.FirestationDTO;
 import com.openclassrooms.safetynet.DTO.PhoneAlertDTO;
-import com.openclassrooms.safetynet.models.Firestation;
 import com.openclassrooms.safetynet.services.SafetyNetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

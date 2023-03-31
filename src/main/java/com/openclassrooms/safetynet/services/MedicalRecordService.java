@@ -18,6 +18,7 @@ public class MedicalRecordService {
     public List<MedicalRecord> findAll() {
         return databaseService.getMedicalRecords();
     }
+
     public List<MedicalRecord> getMedicalRecordsForChild() {
         return databaseService.getMedicalRecords()
                 .stream()
@@ -32,6 +33,7 @@ public class MedicalRecordService {
                 .toList()
                 .get(0);
     }
+
     public List<MedicalRecord> getMedicalRecordsFromFirstAndLastNameForChild(String firstName, String lastName) {
         return databaseService.getMedicalRecords()
                 .stream()
@@ -45,13 +47,20 @@ public class MedicalRecordService {
         return true;
     }
 
-    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
-        int index = databaseService.getMedicalRecords().indexOf(getMedicalRecordFromFirstAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName()));
-        return databaseService.getMedicalRecords().set(index, medicalRecord);
+    public Boolean updateMedicalRecord(MedicalRecord medicalRecord) {
+        if (this.getMedicalRecordFromFirstAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName()) != null) {
+            int index = databaseService.getMedicalRecords().indexOf(getMedicalRecordFromFirstAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName()));
+            databaseService.getMedicalRecords().set(index, medicalRecord);
+            return true;
+        }
+        return false;
     }
 
     public Boolean deleteMedicalRecord(MedicalRecord medicalRecord) {
-        databaseService.getMedicalRecords().remove(medicalRecord);
-        return true;
+        if (this.getMedicalRecordFromFirstAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName()) != null) {
+            databaseService.getMedicalRecords().remove(medicalRecord);
+            return true;
+        }
+        return false;
     }
 }

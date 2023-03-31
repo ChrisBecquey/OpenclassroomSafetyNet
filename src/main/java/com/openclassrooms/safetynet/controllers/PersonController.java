@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.html.HTMLParagraphElement;
 
 import java.util.List;
 
@@ -32,13 +33,17 @@ public class PersonController {
     }
 
     @PutMapping("/person")
-    public Person updatePerson(@RequestBody Person person) {
-        return personService.update(person);
+    public ResponseEntity<String> updatePerson(@RequestBody Person person) {
+        if(personService.update(person))
+            return ResponseEntity.status(HttpStatus.OK).body("Person updated");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The person you want to update dont exist");
     }
 
     @DeleteMapping("/person")
-    public Boolean detetePerson(@RequestParam String firstName, String lastName) {
-        return personService.delete(personService.getPersonByFirstAndLastName(firstName, lastName));
+    public ResponseEntity<String> detetePerson(@RequestParam String firstName, String lastName) {
+        if(personService.delete(personService.getPersonByFirstAndLastName(firstName, lastName)))
+            return ResponseEntity.status(HttpStatus.OK).body("Person deleted");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No person found");
     }
 }
 

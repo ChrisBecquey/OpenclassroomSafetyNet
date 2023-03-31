@@ -5,6 +5,7 @@ import com.openclassrooms.safetynet.models.MedicalRecord;
 import com.openclassrooms.safetynet.services.MedicalRecordService;
 import com.openclassrooms.safetynet.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +35,16 @@ public class MedicalRecordController {
     }
 
     @PutMapping(value = "/medicalRecord")
-    public MedicalRecord updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-       return medicalRecordService.updateMedicalRecord(medicalRecord);
+    public ResponseEntity<String> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+        if(medicalRecordService.updateMedicalRecord(medicalRecord))
+            return  ResponseEntity.status(HttpStatus.OK).body("MedicalRecord updated");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The medicalRecord you want to update dont exist");
     }
 
     @DeleteMapping(value = "/medicalRecord")
-    public  Boolean deleteMedicalRecord(@RequestParam String firstName, String lastName) {
-        return medicalRecordService.deleteMedicalRecord(medicalRecordService.getMedicalRecordFromFirstAndLastName(firstName, lastName));
+    public  ResponseEntity<String> deleteMedicalRecord(@RequestParam String firstName, String lastName) {
+        if(medicalRecordService.deleteMedicalRecord(medicalRecordService.getMedicalRecordFromFirstAndLastName(firstName, lastName)))
+            return ResponseEntity.status(HttpStatus.OK).body("MedicalRecord deleted");
+        return ResponseEntity.status((HttpStatus.NOT_FOUND)).body("No medicalRecord found");
     }
 }

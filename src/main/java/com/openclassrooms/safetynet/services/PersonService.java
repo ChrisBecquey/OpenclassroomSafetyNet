@@ -54,12 +54,19 @@ public class PersonService {
     }
 
     public Boolean delete(Person person) {
-        databaseService.getPersons().remove(person);
-        return true;
+        if (this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) != null) {
+            databaseService.getPersons().remove(person);
+            return true;
+        }
+        return false;
     }
 
-    public Person update(Person person) {
-        int index = databaseService.getPersons().indexOf(getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()));
-        return databaseService.getPersons().set(index, person);
+    public Boolean update(Person person) {
+        if (this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) != null) {
+            int index = databaseService.getPersons().indexOf(getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()));
+            databaseService.getPersons().set(index, person);
+            return true;
+        }
+        return false;
     }
 }
