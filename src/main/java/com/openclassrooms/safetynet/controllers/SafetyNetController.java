@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.controllers;
 
 import com.openclassrooms.safetynet.DTO.CommunityEmailDTO;
+import com.openclassrooms.safetynet.DTO.FireDTO;
 import com.openclassrooms.safetynet.DTO.FirestationDTO;
 import com.openclassrooms.safetynet.DTO.PhoneAlertDTO;
 import com.openclassrooms.safetynet.services.SafetyNetService;
@@ -31,4 +32,18 @@ public class SafetyNetController {
         return  safetyNetService.findPersonsByStationNumber(firestation);
     }
 
+    //fire => liste des habitants à l'adresse + numéro de la caserne de pompier les desservants
+    // nom + prénom + phone + age + antécédents médicaux de chaque personne.
+
+//    @GetMapping(value = "fire", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<FireDTO> getPersonsAtTheFireAdress(@RequestParam String city) {
+//        return safetyNetService.
+//    }
+     // childALert => liste d'enfant habitant à l'adresse (nom + prénom age + list autres membre du foyer
+    // dans le cas ou pas d'enfants, liste vide
+
+    //floodStations => Liste de tous les foyers desservis par la caserne
+    // personnes par adresse, nom + prénom + phone + age + antécédents médicaux
+
+    // personInfo => nom + adresse + age + mail + antécédents Médicaux de chaque habitant, si plusieurs fois le même nom elle doivent apparaitre
 }

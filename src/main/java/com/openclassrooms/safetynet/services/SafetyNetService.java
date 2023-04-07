@@ -3,9 +3,12 @@ package com.openclassrooms.safetynet.services;
 import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.models.Firestation;
 import com.openclassrooms.safetynet.models.MedicalRecord;
+import com.openclassrooms.safetynet.models.Person;
+import com.openclassrooms.safetynet.utils.CalculateAge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +69,24 @@ public class SafetyNetService {
         firestationDTO.setAdult(adult);
         firestationDTO.setChild(child);
         return firestationDTO;
+    }
+
+    public List<FireDTO> findPersonsAtTheFireAdress(String adress) {
+        List<Firestation> firestationList = firestationService.getFirestationByAdress(adress);
+
+        return firestationList
+                        .stream()
+                                .flatMap(f -> personService.getPersonsByAdress(f.getAddress())
+                                        .stream()
+                                        .map(p -> new FireDTO(f.getStation(), this.getPersonFireDTO(p.getFirstName(), p.getLastName()))))
+                        .toList();
+    }
+
+    private PersonFireDTO getPersonFireDTO(String firstName, String lastName) {
+        MedicalRecord medicalRecordFromFirstAndLastName = medicalRecordService.getMedicalRecordFromFirstAndLastName(firstName, lastName);
+        Person personByFirstAndLastName = personService.getPersonByFirstAndLastName(firstName, lastName);
+
+        return new PersonFireDTO(firstName, lastName, personByFirstAndLastName.getPhone(), CalculateAge.calculateAge(Instant.parse(medicalRecordFromFirstAndLastName.getBirthdate())), medicalRecordFromFirstAndLastName.getMedications(), medicalRecordFromFirstAndLastName.getAllergies());
     }
 
 }

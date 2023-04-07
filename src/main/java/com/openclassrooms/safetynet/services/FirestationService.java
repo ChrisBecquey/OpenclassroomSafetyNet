@@ -21,6 +21,11 @@ public class FirestationService {
                 .collect(Collectors.toList());
     }
 
+    public List<Firestation> getFirestationByAdress(String adress) {
+        return databaseService.getFirestations().stream()
+                .filter(station -> station.getAddress().equals(adress))
+                .toList();
+    }
     public Firestation getFirestationByNumberAndAdress(int number, String adress) {
         return databaseService.getFirestations()
                 .stream()
