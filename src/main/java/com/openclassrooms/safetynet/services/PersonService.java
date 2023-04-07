@@ -18,7 +18,7 @@ public class PersonService {
         return databaseService.getPersons();
     }
     public List<Person> getPersonsByLastName(String lastName) {
-        logger.info("Entré dans la méthode");
+        logger.info("Get person by lastname={lastName}", lastName); //
         return databaseService.getPersons().stream()
                 .filter(person -> person.getLastName().equals(lastName))
                 .toList();
@@ -46,7 +46,7 @@ public class PersonService {
     }
 
     public Boolean save(Person person) {
-        if (this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) == null) {
+        if (person != null && this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) == null) {
             databaseService.getPersons().add(person);
             return true;
         }
@@ -54,7 +54,7 @@ public class PersonService {
     }
 
     public Boolean delete(Person person) {
-        if (this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) != null) {
+        if (person != null && this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) != null) {
             databaseService.getPersons().remove(person);
             return true;
         }
@@ -62,7 +62,7 @@ public class PersonService {
     }
 
     public Boolean update(Person person) {
-        if (this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) != null) {
+        if (person != null && this.getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()) != null) {
             int index = databaseService.getPersons().indexOf(getPersonByFirstAndLastName(person.getFirstName(), person.getLastName()));
             databaseService.getPersons().set(index, person);
             return true;

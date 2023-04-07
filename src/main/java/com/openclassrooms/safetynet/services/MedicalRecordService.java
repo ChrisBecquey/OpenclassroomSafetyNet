@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class MedicalRecordService {
     @Autowired
     private DatabaseService databaseService;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     public List<MedicalRecord> findAll() {
         return databaseService.getMedicalRecords();

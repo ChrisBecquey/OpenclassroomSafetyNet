@@ -87,4 +87,5 @@ class PersonControllerTest {
         mockMvc.perform(delete("/person?firstName={firstName}&lastName={lastName}", "Jean", "Michel"))
                 .andExpect(status().isNotFound());
     }
+
 }

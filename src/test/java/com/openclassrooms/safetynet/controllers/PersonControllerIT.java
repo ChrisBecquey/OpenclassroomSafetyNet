@@ -97,6 +97,9 @@ public class PersonControllerIT {
         //Delete the person we add and see if it's work
         mockMvc.perform(delete("/person?firstName={firstName}&lastName={lastName}", "Louis", "Boyd"))
                 .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/person?firstName={firstName}&lastName={lastName}", "Jean", ""))
+                .andExpect(status().isNotFound());
     }
 
     @Test

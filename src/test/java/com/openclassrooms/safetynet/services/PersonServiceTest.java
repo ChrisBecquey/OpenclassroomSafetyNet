@@ -116,6 +116,13 @@ class PersonServiceTest {
     }
 
     @Test
+    void shouldNotRemovePerson_whenPersonIsNull() {
+        when(databaseService.getPersons()).thenReturn(persons);
+        personService.delete(null);
+        assertEquals(3, persons.size());
+    }
+
+    @Test
     void updatePerson() {
         when(databaseService.getPersons()).thenReturn(persons);
         Person personToUpdate = personService.getPersonByFirstAndLastName("Jeanne", "Lambert");

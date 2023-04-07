@@ -26,7 +26,7 @@ public class SafetyNetController {
         return safetyNetService.getPhoneNumber(firestation);
     }
 
-    @GetMapping(value = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/firestationRange", produces = MediaType.APPLICATION_JSON_VALUE)
     public FirestationDTO getPersonsInRangeOfFirestation(@RequestParam int firestation) {
         return  safetyNetService.findPersonsByStationNumber(firestation);
     }

@@ -17,8 +17,6 @@ import java.util.List;
 public class FirestationController {
     @Autowired
     private FirestationService firestationService;
-    @Autowired
-    private PersonService personService;
 
     @GetMapping("/firestations")
     public List<Firestation> getAllFirestations() {
@@ -37,13 +35,17 @@ public class FirestationController {
     }
 
     @PutMapping("/firestation")
-    public Firestation updateFirestation(@RequestBody Firestation firestation) {
-        return firestationService.updateFirestation(firestation);
+    public ResponseEntity<String> updateFirestation(@RequestBody Firestation firestation) {
+        if(firestationService.updateFirestation(firestation))
+            return ResponseEntity.status(HttpStatus.OK).body("Firestation updated");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The firestation you want to update dont exist");
     }
 
     @DeleteMapping("/firestation")
-    public Boolean deleteFirestation(@RequestParam int number, String adress) {
-        return firestationService.deleteFirestation(firestationService.getFirestationByNumberAndAdress(number, adress));
+    public ResponseEntity<String> deleteFirestation(@RequestParam int number, String adress) {
+        if (firestationService.deleteFirestation(firestationService.getFirestationByNumberAndAdress(number, adress)))
+            return ResponseEntity.status(HttpStatus.OK).body("Firestation deleted");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No firestation found");
     }
 
 }

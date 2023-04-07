@@ -38,16 +38,22 @@ public class FirestationService {
     }
 
     public Boolean deleteFirestation(Firestation firestation) {
-        databaseService.getFirestations().remove(firestation);
-        return true;
+        if (this.getFirestationByNumberAndAdress(firestation.getStation(), firestation.getAddress()) != null) {
+            databaseService.getFirestations().remove(firestation);
+            return true;
+        }
+        return false;
     }
 
-    public Firestation updateFirestation(Firestation firestation) {
-        databaseService.getFirestations().forEach(f -> {
-            if (f.getAddress().equals(firestation.getAddress())){
-                f.setStation(firestation.getStation());
-            }
-        });
-        return firestation;
+    public Boolean updateFirestation(Firestation firestation) {
+        if (this.getFirestationByNumberAndAdress(firestation.getStation(), firestation.getAddress()) != null) {
+            databaseService.getFirestations().forEach(f -> {
+                if (f.getAddress().equals(firestation.getAddress())){
+                    f.setStation(firestation.getStation());
+                }
+            });
+            return true;
+        }
+        return false;
     }
 }
