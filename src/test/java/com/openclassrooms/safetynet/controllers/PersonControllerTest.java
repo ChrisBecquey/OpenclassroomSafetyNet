@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -40,6 +42,24 @@ class PersonControllerTest {
     }
 
     @Test
+    void getPerson() throws Exception {
+        Person person1 = new Person();
+        person1.setFirstName("Jean");
+        person1.setLastName("Michel");
+        person1.setEmail("Louis.dupont@gmail.com");
+        person1.setAddress("10 rue de la croix");
+        person1.setPhone("888-666-2233");
+        person1.setZip("59000");
+        person1.setCity("Lille");
+
+        when(personService.getPersonByFirstAndLastName(any(), any())).thenReturn(person1);
+        mockMvc.perform(get("/persons?firstName={firstName}&lastName={lastName}", "Jean", "Michel"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+    }
+
+    @Test
     void savePerson() throws Exception {
         Person person1 = new Person();
         person1.setFirstName("Jean");
@@ -57,6 +77,27 @@ class PersonControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(personJson))
                 .andExpect(status().isCreated())
+                .andReturn();
+    }
+
+    @Test
+    void shouldReturnConflict_whenPersonAlreadyExist() throws Exception {
+        Person person1 = new Person();
+        person1.setFirstName("Jean");
+        person1.setLastName("Michel");
+        person1.setEmail("Louis.dupont@gmail.com");
+        person1.setAddress("10 rue de la croix");
+        person1.setPhone("888-666-2233");
+        person1.setZip("59000");
+        person1.setCity("Lille");
+
+        String personJson = new ObjectMapper().writeValueAsString(person1);
+        when(personService.save(any())).thenReturn(false);
+
+        mockMvc.perform(post("/person")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(personJson))
+                .andExpect(status().isConflict())
                 .andReturn();
     }
 
