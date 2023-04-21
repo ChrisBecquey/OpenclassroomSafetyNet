@@ -8,7 +8,7 @@ import com.openclassrooms.safetynet.utils.CalculateAge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +18,6 @@ public class SafetyNetService {
     private PersonService personService;
     @Autowired
     private FirestationService firestationService;
-
-    @Autowired
-    private DatabaseService databaseService;
-
     @Autowired
     private MedicalRecordService medicalRecordService;
 
@@ -82,11 +78,12 @@ public class SafetyNetService {
                         .toList();
     }
 
-    private PersonFireDTO getPersonFireDTO(String firstName, String lastName) {
+    PersonFireDTO getPersonFireDTO(String firstName, String lastName) {
         MedicalRecord medicalRecordFromFirstAndLastName = medicalRecordService.getMedicalRecordFromFirstAndLastName(firstName, lastName);
         Person personByFirstAndLastName = personService.getPersonByFirstAndLastName(firstName, lastName);
+        ZoneOffset zoneOffset = ZoneId.of("UTC").getRules().getOffset(LocalDateTime.now());
 
-        return new PersonFireDTO(firstName, lastName, personByFirstAndLastName.getPhone(), CalculateAge.calculateAge(Instant.parse(medicalRecordFromFirstAndLastName.getBirthdate())), medicalRecordFromFirstAndLastName.getMedications(), medicalRecordFromFirstAndLastName.getAllergies());
+        return new PersonFireDTO(firstName, lastName, personByFirstAndLastName.getPhone(), CalculateAge.calculateAge(LocalDate.parse(medicalRecordFromFirstAndLastName.getBirthdate(), CalculateAge.formatter).atStartOfDay().toInstant(zoneOffset)), medicalRecordFromFirstAndLastName.getMedications(), medicalRecordFromFirstAndLastName.getAllergies());
     }
 
 }

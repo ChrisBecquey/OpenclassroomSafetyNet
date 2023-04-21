@@ -11,6 +11,7 @@ public class FireDTO {
         this.personFireDTO = personFireDTO;
     }
 
+
     public int getStationNumber() {
         return stationNumber;
     }

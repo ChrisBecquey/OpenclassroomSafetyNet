@@ -32,13 +32,12 @@ public class SafetyNetController {
         return  safetyNetService.findPersonsByStationNumber(firestation);
     }
 
-    //fire => liste des habitants à l'adresse + numéro de la caserne de pompier les desservants
-    // nom + prénom + phone + age + antécédents médicaux de chaque personne.
+    @GetMapping(value = "/fire", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FireDTO> getPersonsAtTheFireAdress(@RequestParam String adress) {
+        return safetyNetService.findPersonsAtTheFireAdress(adress);
+    }
 
-//    @GetMapping(value = "fire", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<FireDTO> getPersonsAtTheFireAdress(@RequestParam String city) {
-//        return safetyNetService.
-//    }
+
      // childALert => liste d'enfant habitant à l'adresse (nom + prénom age + list autres membre du foyer
     // dans le cas ou pas d'enfants, liste vide
 

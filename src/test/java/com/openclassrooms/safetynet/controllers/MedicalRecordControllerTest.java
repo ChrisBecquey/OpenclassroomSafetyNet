@@ -83,7 +83,7 @@ class MedicalRecordControllerTest {
         medicalRecord1.setAllergies(allergies1);
 
         String medicalRecordJson = new ObjectMapper().writeValueAsString(medicalRecord1);
-        when(medicalRecordService.addMedicalRecord(any())).thenThrow(new ResponseStatusException(HttpStatus.CONFLICT, "MedicalRecord already exist"));
+        when(medicalRecordService.addMedicalRecord(any())).thenReturn(false);
 
         mockMvc.perform(post("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON)

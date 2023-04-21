@@ -1,9 +1,6 @@
 package com.openclassrooms.safetynet.controllers;
 
-import com.openclassrooms.safetynet.DTO.CommunityEmailDTO;
-import com.openclassrooms.safetynet.DTO.FirestationDTO;
-import com.openclassrooms.safetynet.DTO.PersonDTO;
-import com.openclassrooms.safetynet.DTO.PhoneAlertDTO;
+import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.services.SafetyNetService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +60,8 @@ class SafetyNetControllerTest {
         when(safetyNetService.getPhoneNumber(firestation)).thenReturn(phoneAlertDTOList);
 
         mockMvc.perform(get("/phoneAlert")
-                .param("firestation", Integer.toString(firestation))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("firestation", Integer.toString(firestation))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].phone").value("841-874-6512"));
@@ -96,9 +93,46 @@ class SafetyNetControllerTest {
         when(safetyNetService.findPersonsByStationNumber(firestation)).thenReturn(firestationDTO);
 
         mockMvc.perform(get("/firestationRange")
-                .param("firestation", Integer.toString(firestation))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("firestation", Integer.toString(firestation))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void getPersonsAtTheFireAdress() throws Exception {
+        String adress = "12 rue du pont";
+        List<FireDTO> fireDTOList = new ArrayList<>();
+        PersonFireDTO personFireDTO1 = new PersonFireDTO();
+        personFireDTO1.setFirsName("Roger");
+        personFireDTO1.setLastName("Boyd");
+        personFireDTO1.setPhone("777-888-999");
+        personFireDTO1.setAge(35);
+        personFireDTO1.setMedications(List.of("aznol:350mg", "hydrapermazol:100mg"));
+        personFireDTO1.setAllergies(List.of("peanut"));
+
+        PersonFireDTO personFireDTO2 = new PersonFireDTO();
+        personFireDTO2.setFirsName("Felicia");
+        personFireDTO2.setLastName("Dupont");
+        personFireDTO2.setPhone("888-999-777");
+        personFireDTO2.setAge(22);
+        personFireDTO2.setMedications(List.of());
+        personFireDTO2.setAllergies(List.of("shellfish"));
+
+        FireDTO fireDTO1 = new FireDTO(1, personFireDTO1);
+        fireDTO1.setStationNumber(1);
+        fireDTO1.setPersonFireDTO(personFireDTO1);
+        fireDTOList.add(fireDTO1);
+
+        FireDTO fireDTO2 = new FireDTO(1, personFireDTO2);
+        fireDTO2.setStationNumber(1);
+        fireDTO2.setPersonFireDTO(personFireDTO2);
+
+        when(safetyNetService.findPersonsAtTheFireAdress(adress)).thenReturn(fireDTOList);
+
+        mockMvc.perform(get("/fire")
+                        .param("adress", adress)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

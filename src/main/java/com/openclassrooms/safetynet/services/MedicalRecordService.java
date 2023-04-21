@@ -1,11 +1,11 @@
 package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.models.MedicalRecord;
+import com.openclassrooms.safetynet.utils.CalculateAge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 public class MedicalRecordService {
     @Autowired
     private DatabaseService databaseService;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     public List<MedicalRecord> findAll() {
         return databaseService.getMedicalRecords();
@@ -22,7 +21,7 @@ public class MedicalRecordService {
     public List<MedicalRecord> getMedicalRecordsForChild() {
         return databaseService.getMedicalRecords()
                 .stream()
-                .filter(medicalRecord -> LocalDate.parse(medicalRecord.getBirthdate(), formatter).isAfter(LocalDate.now().minusYears(18)))
+                .filter(medicalRecord -> LocalDate.parse(medicalRecord.getBirthdate(), CalculateAge.formatter).isAfter(LocalDate.now().minusYears(18)))
                 .collect(Collectors.toList());
     }
 
@@ -38,7 +37,7 @@ public class MedicalRecordService {
         return databaseService.getMedicalRecords()
                 .stream()
                 .filter(medicalRecord -> medicalRecord.getFirstName().equals(firstName) && medicalRecord.getLastName().equals(lastName))
-                .filter(medicalRecord -> LocalDate.parse(medicalRecord.getBirthdate(), formatter).isAfter(LocalDate.now().minusYears(18)))
+                .filter(medicalRecord -> LocalDate.parse(medicalRecord.getBirthdate(), CalculateAge.formatter).isAfter(LocalDate.now().minusYears(18)))
                 .collect(Collectors.toList());
     }
 

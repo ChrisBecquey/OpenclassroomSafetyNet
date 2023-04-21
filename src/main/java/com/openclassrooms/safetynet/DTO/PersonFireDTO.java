@@ -5,6 +5,28 @@ import java.util.List;
 public class PersonFireDTO {
     private String firsName;
 
+
+    private String lastName;
+    private String phone;
+
+    private int age;
+
+    private List medications;
+    private List allergies;
+
+    public PersonFireDTO(String firsName, String lastName, String phone, int age, List medications, List allergies) {
+        this.firsName = firsName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.age = age;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
+    public PersonFireDTO() {
+
+    }
+
     public String getFirsName() {
         return firsName;
     }
@@ -53,22 +75,6 @@ public class PersonFireDTO {
         this.allergies = allergies;
     }
 
-    private String lastName;
-    private String phone;
-
-    private int age;
-
-    private List medications;
-    private List allergies;
-
-    public PersonFireDTO(String firsName, String lastName, String phone, int age, List medications, List allergies) {
-        this.firsName = firsName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.age = age;
-        this.medications = medications;
-        this.allergies = allergies;
-    }
 }
 
 
