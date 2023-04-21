@@ -1,9 +1,6 @@
 package com.openclassrooms.safetynet.controllers;
 
-import com.openclassrooms.safetynet.DTO.CommunityEmailDTO;
-import com.openclassrooms.safetynet.DTO.FireDTO;
-import com.openclassrooms.safetynet.DTO.FirestationDTO;
-import com.openclassrooms.safetynet.DTO.PhoneAlertDTO;
+import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.services.SafetyNetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -37,9 +34,12 @@ public class SafetyNetController {
         return safetyNetService.findPersonsAtTheFireAdress(adress);
     }
 
+    @GetMapping(value = "/childAlert", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ChildAlertDTO getChildAtTheAdress(@RequestParam String adress) {
+        return safetyNetService.findChildAtTheAdress(adress);
+    }
 
-     // childALert => liste d'enfant habitant à l'adresse (nom + prénom age + list autres membre du foyer
-    // dans le cas ou pas d'enfants, liste vide
+
 
     //floodStations => Liste de tous les foyers desservis par la caserne
     // personnes par adresse, nom + prénom + phone + age + antécédents médicaux

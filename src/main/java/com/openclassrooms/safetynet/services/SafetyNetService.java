@@ -83,7 +83,35 @@ public class SafetyNetService {
         Person personByFirstAndLastName = personService.getPersonByFirstAndLastName(firstName, lastName);
         ZoneOffset zoneOffset = ZoneId.of("UTC").getRules().getOffset(LocalDateTime.now());
 
-        return new PersonFireDTO(firstName, lastName, personByFirstAndLastName.getPhone(), CalculateAge.calculateAge(LocalDate.parse(medicalRecordFromFirstAndLastName.getBirthdate(), CalculateAge.formatter).atStartOfDay().toInstant(zoneOffset)), medicalRecordFromFirstAndLastName.getMedications(), medicalRecordFromFirstAndLastName.getAllergies());
+        return new PersonFireDTO(
+                firstName,
+                lastName,
+                personByFirstAndLastName.getPhone(),
+                CalculateAge.calculateAge(LocalDate.parse(medicalRecordFromFirstAndLastName.getBirthdate(), CalculateAge.formatter).atStartOfDay().toInstant(zoneOffset)),
+                medicalRecordFromFirstAndLastName.getMedications(),
+                medicalRecordFromFirstAndLastName.getAllergies());
     }
+
+    public ChildAlertDTO findChildAtTheAdress(String adress) {
+        List<Person> personList = personService.getPersonsByAdress(adress);
+        ZoneOffset zoneOffset = ZoneId.of("UTC").getRules().getOffset(LocalDateTime.now());
+
+
+        List<ChildDTO> childDTOS = personList
+                .stream()
+                .flatMap(person -> medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild(person.getFirstName(), person.getLastName())
+                        .stream()
+                        .map(child -> new ChildDTO(child.getFirstName(), child.getLastName(), CalculateAge.calculateAge(
+                                LocalDate.parse(child.getBirthdate(), CalculateAge.formatter).atStartOfDay().toInstant(zoneOffset)))))
+                .toList();
+
+
+        ChildAlertDTO childAlertDTO = new ChildAlertDTO();
+        childAlertDTO.setChildAtTheAdress(childDTOS);
+        childAlertDTO.setPersonsAtTheAdress(personList);
+
+        return childAlertDTO;
+    }
+
 
 }

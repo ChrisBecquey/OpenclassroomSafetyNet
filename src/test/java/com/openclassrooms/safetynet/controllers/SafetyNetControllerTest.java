@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.controllers;
 
 import com.openclassrooms.safetynet.DTO.*;
+import com.openclassrooms.safetynet.models.Person;
 import com.openclassrooms.safetynet.services.SafetyNetService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,5 +135,50 @@ class SafetyNetControllerTest {
                         .param("adress", adress)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void getChildAtTheAdress() throws Exception {
+        String adress = "12 rue du pont";
+        ChildAlertDTO childAlertDTO = new ChildAlertDTO();
+
+        List<Person> persons = new ArrayList<>();
+        List<ChildDTO> childDTOS = new ArrayList<>();
+        Person person1 = new Person();
+        person1.setFirstName("Albert");
+        person1.setLastName("Lambert");
+        person1.setAddress("12 rue du pont");
+        person1.setEmail("Albert.dupont@gmail.com");
+        person1.setPhone("777-555-1122");
+        person1.setZip("31000");
+        person1.setCity("Toulouse");
+        persons.add(person1);
+
+        Person person2 = new Person();
+        person2.setFirstName("Jeanne");
+        person2.setLastName("Lambert");
+        person2.setAddress("12 rue du pont");
+        person2.setEmail("Jeanne.lambert@gmail.com");
+        person2.setPhone("999-555-1133");
+        person2.setZip("31000");
+        person2.setCity("Toulouse");
+        persons.add(person2);
+
+        ChildDTO childDTO1 = new ChildDTO("Jeanne", "Lambert", 12);
+        childDTO1.setFirstName("Jeanne");
+        childDTO1.setLastName("Lambert");
+        childDTO1.setAge(12);
+        childDTOS.add(childDTO1);
+
+        childAlertDTO.setChildAtTheAdress(childDTOS);
+        childAlertDTO.setPersonsAtTheAdress(persons);
+
+        when(safetyNetService.findChildAtTheAdress(adress)).thenReturn(childAlertDTO);
+
+        mockMvc.perform(get("/childAlert")
+                        .param("adress", "12 rue du pont")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }

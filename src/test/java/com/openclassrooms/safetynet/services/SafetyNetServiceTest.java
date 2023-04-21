@@ -249,4 +249,51 @@ class SafetyNetServiceTest {
         assertEquals(personFireDTO.getFirsName(), "Albert");
         assertEquals(personFireDTO.getAge(), 13);
     }
+
+/*    @Test
+    void getChildAtTheAdress() throws Exception{
+        Person person1 = new Person();
+        person1.setFirstName("Albert");
+        person1.setLastName("Lambert");
+        person1.setAddress("12 rue du pont");
+        person1.setEmail("Albert.dupont@gmail.com");
+        person1.setPhone("777-555-1122");
+        person1.setZip("31000");
+        person1.setCity("Toulouse");
+        persons.add(person1);
+
+        Person person2 = new Person();
+        person2.setFirstName("Jeanne");
+        person2.setLastName("Lambert");
+        person2.setAddress("12 rue du pont");
+        person2.setEmail("Jeanne.lambert@gmail.com");
+        person2.setPhone("999-555-1133");
+        person2.setZip("31000");
+        person2.setCity("Toulouse");
+        persons.add(person2);
+
+        List<MedicalRecord> medicalRecordList = new ArrayList<>();
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setFirstName("Albert");
+        medicalRecord1.setLastName("Lambert");
+        medicalRecord1.setBirthdate("03/06/2010");
+        List<String> medications1 = new ArrayList<>();
+        List<String> listMedications1 = Arrays.asList("aznol:350mg", "hydrapermazol:100mg");
+        medications1.addAll(listMedications1);
+        medicalRecord1.setMedications(medications1);
+        List<String> allergies1 = new ArrayList<>();
+        List<String> listAllergies1 = Arrays.asList("peanut", "shellfish", "aznol");
+        allergies1.addAll(listAllergies1);
+        medicalRecord1.setAllergies(allergies1);
+        medicalRecordList.add(medicalRecord1);
+
+        String adress = "12 rue du pont";
+
+        when(personService.getPersonsByAdress(any())).thenReturn(persons);
+        when(medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild(any(), any())).thenReturn(medicalRecordList);
+        ChildAlertDTO childAlertDTO = safetyNetService.findChildAtTheAdress(adress);
+        assertEquals(1, childAlertDTO.getChildAtTheAdress().size());
+        assertEquals(2, childAlertDTO.getPersonsAtTheAdress().size());
+        assertTrue(childAlertDTO.getChildAtTheAdress().get(0).getFirstName().equals("Albert"));
+    }*/
 }

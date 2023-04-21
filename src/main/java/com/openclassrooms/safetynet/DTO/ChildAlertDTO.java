@@ -5,33 +5,16 @@ import com.openclassrooms.safetynet.models.Person;
 import java.util.List;
 
 public class ChildAlertDTO {
-    private String firstName;
-    private String lastName;
-    private int age;
+    private List<ChildDTO> childAtTheAdress;
     private List<Person> personsAtTheAdress;
 
-    public String getFirstName() {
-        return firstName;
+
+    public List<ChildDTO> getChildAtTheAdress() {
+        return childAtTheAdress;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public void setChildAtTheAdress(List<ChildDTO> childAtTheAdress) {
+        this.childAtTheAdress = childAtTheAdress;
     }
 
     public List<Person> getPersonsAtTheAdress() {
@@ -41,4 +24,5 @@ public class ChildAlertDTO {
     public void setPersonsAtTheAdress(List<Person> personsAtTheAdress) {
         this.personsAtTheAdress = personsAtTheAdress;
     }
+
 }
