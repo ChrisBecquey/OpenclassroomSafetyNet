@@ -11,6 +11,16 @@ public class PersonInfoDTO {
     private List medications;
     private List allergies;
 
+    public PersonInfoDTO(String firstName, String lastName, String address, String email, Integer calculateAge, List medications, List allergies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.adress = address;
+        this.email = email;
+        this.age = calculateAge;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
     public String getFirstName() {
         return firstName;
     }

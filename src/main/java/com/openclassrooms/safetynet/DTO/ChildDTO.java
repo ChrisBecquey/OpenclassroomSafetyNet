@@ -4,6 +4,9 @@ public class ChildDTO {
     private String firstName;
 
     public ChildDTO(String firstName, String lastName, Integer calculateAge) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = calculateAge;
     }
 
     public String getFirstName() {

@@ -296,4 +296,35 @@ class SafetyNetServiceTest {
         assertEquals(2, childAlertDTO.getPersonsAtTheAdress().size());
         assertTrue(childAlertDTO.getChildAtTheAdress().get(0).getFirstName().equals("Albert"));
     }*/
+    @Test
+    void getPersonInfos() {
+        Person person = new Person();
+        person.setFirstName("Albert");
+        person.setLastName("Lambert");
+        person.setAddress("12 rue du pont");
+        person.setEmail("Albert.dupont@gmail.com");
+        person.setPhone("777-555-1122");
+        person.setZip("31000");
+        person.setCity("Toulouse");
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setFirstName("Albert");
+        medicalRecord.setLastName("Lambert");
+        medicalRecord.setBirthdate("03/06/2010");
+        List<String> medications = new ArrayList<>();
+        List<String> listMedications = Arrays.asList("aznol:350mg", "hydrapermazol:100mg");
+        medications.addAll(listMedications);
+        medicalRecord.setMedications(medications);
+        List<String> allergies = new ArrayList<>();
+        List<String> listAllergies = Arrays.asList("peanut", "shellfish", "aznol");
+        allergies.addAll(listAllergies);
+        medicalRecord.setAllergies(allergies);
+
+        when(medicalRecordService.getMedicalRecordFromFirstAndLastName(any(), any())).thenReturn(medicalRecord);
+        when(personService.getPersonByFirstAndLastName(any(), any())).thenReturn(person);
+
+        PersonInfoDTO personInfoDTO = safetyNetService.getPersonInfos("Albert", "Lambert");
+        assertTrue(personInfoDTO.getFirstName().equals("Albert"));
+        assertEquals(13, personInfoDTO.getAge());
+    }
 }

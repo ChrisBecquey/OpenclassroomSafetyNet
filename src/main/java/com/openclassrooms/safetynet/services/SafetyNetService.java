@@ -113,5 +113,19 @@ public class SafetyNetService {
         return childAlertDTO;
     }
 
+    public PersonInfoDTO getPersonInfos(String firstName, String lastName) {
+        MedicalRecord medicalRecordFromFirstAndLastName = medicalRecordService.getMedicalRecordFromFirstAndLastName(firstName, lastName);
+        Person personByFirstAndLastName = personService.getPersonByFirstAndLastName(firstName, lastName);
+        ZoneOffset zoneOffset = ZoneId.of("UTC").getRules().getOffset(LocalDateTime.now());
 
+        return new PersonInfoDTO(
+                firstName,
+                lastName,
+                personByFirstAndLastName.getAddress(),
+                personByFirstAndLastName.getEmail(),
+                CalculateAge.calculateAge(LocalDate.parse(medicalRecordFromFirstAndLastName.getBirthdate(), CalculateAge.formatter).atStartOfDay().toInstant(zoneOffset)),
+                medicalRecordFromFirstAndLastName.getMedications(),
+                medicalRecordFromFirstAndLastName.getAllergies()
+        );
+    }
 }

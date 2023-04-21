@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -177,6 +178,25 @@ class SafetyNetControllerTest {
 
         mockMvc.perform(get("/childAlert")
                         .param("adress", "12 rue du pont")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void getPersonInfo() throws Exception {
+        PersonInfoDTO personInfoDTO = new PersonInfoDTO("Jeanne", "Lambert", "12 rue du pont", "jeanne.lambert@gmail.com", 25, List.of("insuline"), List.of("peanut"));
+        personInfoDTO.setFirstName("Jeanne");
+        personInfoDTO.setLastName("Lambert");
+        personInfoDTO.setAdress("12 rue du pont");
+        personInfoDTO.setEmail("jeanne.lambert@gmail.com");
+        personInfoDTO.setAge(25);
+        personInfoDTO.setMedications(List.of("insuline"));
+        personInfoDTO.setAllergies(List.of("peanut"));
+        when(safetyNetService.getPersonInfos(any(), any())).thenReturn(personInfoDTO);
+
+        mockMvc.perform(get("/personInfo")
+                        .param("firstName", "Jeanne", "lastName", "Lambert")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));

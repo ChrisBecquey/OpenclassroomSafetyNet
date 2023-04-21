@@ -39,7 +39,10 @@ public class SafetyNetController {
         return safetyNetService.findChildAtTheAdress(adress);
     }
 
-
+    @GetMapping(value = "/personInfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PersonInfoDTO getPersonInfo(@RequestParam String firstName, String lastName) {
+        return safetyNetService.getPersonInfos(firstName, lastName);
+    }
 
     //floodStations => Liste de tous les foyers desservis par la caserne
     // personnes par adresse, nom + prénom + phone + age + antécédents médicaux
