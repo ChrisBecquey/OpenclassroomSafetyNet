@@ -1,18 +1,13 @@
 package com.openclassrooms.safetynet.services;
 
 import com.openclassrooms.safetynet.models.MedicalRecord;
-import com.openclassrooms.safetynet.models.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.print.attribute.standard.Media;
-import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
