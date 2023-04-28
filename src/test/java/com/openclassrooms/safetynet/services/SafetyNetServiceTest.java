@@ -250,7 +250,7 @@ class SafetyNetServiceTest {
         assertEquals(personFireDTO.getAge(), 13);
     }
 
-/*    @Test
+    @Test
     void getChildAtTheAdress() throws Exception{
         Person person1 = new Person();
         person1.setFirstName("Albert");
@@ -290,12 +290,13 @@ class SafetyNetServiceTest {
         String adress = "12 rue du pont";
 
         when(personService.getPersonsByAdress(any())).thenReturn(persons);
-        when(medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild(any(), any())).thenReturn(medicalRecordList);
+        when(medicalRecordService.getMedicalRecordsFromFirstAndLastNameForChild("Albert", "Lambert")).thenReturn(medicalRecordList);
         ChildAlertDTO childAlertDTO = safetyNetService.findChildAtTheAdress(adress);
+
         assertEquals(1, childAlertDTO.getChildAtTheAdress().size());
         assertEquals(2, childAlertDTO.getPersonsAtTheAdress().size());
         assertTrue(childAlertDTO.getChildAtTheAdress().get(0).getFirstName().equals("Albert"));
-    }*/
+    }
     @Test
     void getPersonInfos() {
         Person person = new Person();

@@ -6,6 +6,15 @@ import java.util.Objects;
 public class Person {
     private String firstName;
     private String lastName;
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
     private String address;
     private String city;
     private String zip;
