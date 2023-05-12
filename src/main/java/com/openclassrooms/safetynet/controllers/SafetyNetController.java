@@ -53,7 +53,4 @@ public class SafetyNetController {
         logger.info("Get the infos for this this person: firstName: {}, lastName: {}", firstName, lastName);
         return safetyNetService.getPersonInfos(firstName, lastName);
     }
-
-    //floodStations => Liste de tous les foyers desservis par la caserne
-    // personnes par adresse, nom + prénom + phone + age + antécédents médicaux
 }

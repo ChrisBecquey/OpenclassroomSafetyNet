@@ -87,16 +87,4 @@ class FirestationServiceTest {
         firestationService.deleteFirestation(firestationToDelete);
         assertEquals(2, databaseService.getFirestations().size());
     }
-
-/*    @Test
-    void updateFirestation() {
-        when(databaseService.getFirestations()).thenReturn(firestations);
-        Firestation firestationToUpdate = new Firestation();
-        firestationToUpdate.setAddress("1509 Culver St");
-        firestationToUpdate.setStation(5);
-
-        firestationService.updateFirestation(firestationToUpdate);
-        assertEquals(5, databaseService.getFirestations().get(0).getStation());
-        assertEquals(3, databaseService.getFirestations().size());
-    }*/
 }
