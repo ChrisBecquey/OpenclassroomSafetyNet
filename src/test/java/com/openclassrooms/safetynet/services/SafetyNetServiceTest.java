@@ -183,7 +183,7 @@ class SafetyNetServiceTest {
         MedicalRecord medicalRecord2 = new MedicalRecord();
         medicalRecord2.setFirstName("Jeanne");
         medicalRecord2.setLastName("Lambert");
-        medicalRecord2.setBirthdate("05/10/1995");
+        medicalRecord2.setBirthdate("05/25/1995");
         List<String> medications2 = new ArrayList<>();
         List<String> listMedications2 = Arrays.asList("aznol:350mg", "hydrapermazol:100mg");
         medications2.addAll(listMedications2);
