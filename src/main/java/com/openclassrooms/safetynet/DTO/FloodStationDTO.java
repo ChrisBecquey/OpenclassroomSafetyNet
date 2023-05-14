@@ -10,6 +10,15 @@ public class FloodStationDTO {
     private List medications;
     private List allergies;
 
+    public FloodStationDTO(String firstName, String lastName, String phone, Integer calculateAge, List medications, List allergies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.age = calculateAge;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
     public String getFirstName() {
         return firstName;
     }

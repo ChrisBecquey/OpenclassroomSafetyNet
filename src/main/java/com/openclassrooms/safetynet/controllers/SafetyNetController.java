@@ -31,26 +31,32 @@ public class SafetyNetController {
     }
 
     @GetMapping(value = "/firestationRange", produces = MediaType.APPLICATION_JSON_VALUE)
-    public FirestationDTO getPersonsInRangeOfFirestation(@RequestParam int firestation) {
-        logger.info("Get all the person in range of this firestation: {}", firestation);
-        return safetyNetService.findPersonsByStationNumber(firestation);
+    public FirestationDTO getPersonsInRangeOfFirestation(@RequestParam int stationNumber) {
+        logger.info("Get all the person in range of this firestation: {}", stationNumber);
+        return safetyNetService.findPersonsByStationNumber(stationNumber);
     }
 
     @GetMapping(value = "/fire", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<FireDTO> getPersonsAtTheFireAdress(@RequestParam String adress) {
-        logger.info("Get all the persons at this adress: {}", adress);
-        return safetyNetService.findPersonsAtTheFireAdress(adress);
+    public List<FireDTO> getPersonsAtTheFireAdress(@RequestParam String address) {
+        logger.info("Get all the persons at this address: {}", address);
+        return safetyNetService.findPersonsAtTheFireAdress(address);
     }
 
     @GetMapping(value = "/childAlert", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ChildAlertDTO getChildAtTheAdress(@RequestParam String adress) {
-        logger.info("Get all the childs at this adress: {}", adress);
-        return safetyNetService.findChildAtTheAdress(adress);
+    public ChildAlertDTO getChildAtTheAdress(@RequestParam String address) {
+        logger.info("Get all the childs at this address: {}", address);
+        return safetyNetService.findChildAtTheAdress(address);
     }
 
     @GetMapping(value = "/personInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonInfoDTO getPersonInfo(@RequestParam String firstName, String lastName) {
         logger.info("Get the infos for this this person: firstName: {}, lastName: {}", firstName, lastName);
         return safetyNetService.getPersonInfos(firstName, lastName);
+    }
+
+    @GetMapping(value = "/flood/stations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FloodDTO> getFloodInformations(@RequestParam List<Integer> stations) {
+        logger.info("Get all the persons informations at address of flood for those fireStation: {}", stations);
+        return safetyNetService.getFloodInformations(stations);
     }
 }

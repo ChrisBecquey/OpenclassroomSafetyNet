@@ -95,7 +95,7 @@ class SafetyNetControllerTest {
         when(safetyNetService.findPersonsByStationNumber(firestation)).thenReturn(firestationDTO);
 
         mockMvc.perform(get("/firestationRange")
-                        .param("firestation", Integer.toString(firestation))
+                        .param("stationNumber", Integer.toString(firestation))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -103,7 +103,7 @@ class SafetyNetControllerTest {
 
     @Test
     void getPersonsAtTheFireAdress() throws Exception {
-        String adress = "12 rue du pont";
+        String address = "12 rue du pont";
         List<FireDTO> fireDTOList = new ArrayList<>();
         PersonFireDTO personFireDTO1 = new PersonFireDTO();
         personFireDTO1.setFirsName("Roger");
@@ -130,17 +130,17 @@ class SafetyNetControllerTest {
         fireDTO2.setStationNumber(1);
         fireDTO2.setPersonFireDTO(personFireDTO2);
 
-        when(safetyNetService.findPersonsAtTheFireAdress(adress)).thenReturn(fireDTOList);
+        when(safetyNetService.findPersonsAtTheFireAdress(address)).thenReturn(fireDTOList);
 
         mockMvc.perform(get("/fire")
-                        .param("adress", adress)
+                        .param("address", address)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getChildAtTheAdress() throws Exception {
-        String adress = "12 rue du pont";
+        String address = "12 rue du pont";
         ChildAlertDTO childAlertDTO = new ChildAlertDTO();
 
         List<Person> persons = new ArrayList<>();
@@ -174,10 +174,10 @@ class SafetyNetControllerTest {
         childAlertDTO.setChildAtTheAdress(childDTOS);
         childAlertDTO.setPersonsAtTheAdress(persons);
 
-        when(safetyNetService.findChildAtTheAdress(adress)).thenReturn(childAlertDTO);
+        when(safetyNetService.findChildAtTheAdress(address)).thenReturn(childAlertDTO);
 
         mockMvc.perform(get("/childAlert")
-                        .param("adress", "12 rue du pont")
+                        .param("address", "12 rue du pont")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -198,6 +198,27 @@ class SafetyNetControllerTest {
         mockMvc.perform(get("/personInfo")
                         .param("firstName", "Jeanne", "lastName", "Lambert")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void getFloodInformation() throws Exception {
+        FloodStationDTO floodStationDTO1 = new FloodStationDTO("Jean", "Dupont", "666-777-888", 25, List.of("insuline"), List.of("peanuts"));
+        FloodStationDTO floodStationDTO2 = new FloodStationDTO("Pauline", "Dupont", "444-555-666", 29, List.of("doliprane"), List.of("butter"));
+        FloodStationDTO floodStationDTO3 = new FloodStationDTO("Robert", "Kert", "777-888-999", 85, List.of("doliprane", "insuline"), List.of("eggs"));
+
+        FloodDTO floodDTO1 = new FloodDTO("12 rue du pont", List.of(floodStationDTO1, floodStationDTO2));
+        FloodDTO floodDTO2 = new FloodDTO("3 rue de la croix", List.of(floodStationDTO3));
+
+        List<FloodDTO> floodDTOList = new ArrayList<>();
+        floodDTOList.add(floodDTO1);
+        floodDTOList.add(floodDTO2);
+        when(safetyNetService.getFloodInformations(any())).thenReturn(floodDTOList);
+
+        mockMvc.perform(get("/flood/stations")
+                .param("stations", "1, 2")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }

@@ -48,6 +48,12 @@ class FirestationServiceTest {
     }
 
     @Test
+    void getFirestationsByList() {
+        when(databaseService.getFirestations()).thenReturn(firestations);
+        List<Firestation> firestationListByListOfStations = firestationService.getFirestationFromList(List.of(1,2));
+        assertEquals(3, firestationListByListOfStations.size());
+    }
+    @Test
     void getFirestationByAdress() {
         when(databaseService.getFirestations()).thenReturn(firestations);
         List<Firestation> firestationByAdressList = firestationService.getFirestationByAdress("1509 Culver St");

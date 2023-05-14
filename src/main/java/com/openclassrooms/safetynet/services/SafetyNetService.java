@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,5 +128,29 @@ public class SafetyNetService {
                 medicalRecordFromFirstAndLastName.getMedications(),
                 medicalRecordFromFirstAndLastName.getAllergies()
         );
+    }
+    public List<FloodDTO> getFloodInformations(List<Integer> stations) {
+        List<Firestation> firestations = firestationService.getFirestationFromList(stations);
+
+        return firestations
+                .stream()
+                .flatMap(f -> personService.getPersonsByAdress(f.getAddress())
+                        .stream()
+                        .map(p -> new FloodDTO(p.getAddress(), List.of(this.getFloodStationDTO(p.getFirstName(), p.getLastName())))))
+                        .toList();
+    }
+
+    FloodStationDTO getFloodStationDTO(String firstName, String lastName) {
+        MedicalRecord medicalRecordFromFirstAndLastName = medicalRecordService.getMedicalRecordFromFirstAndLastName(firstName, lastName);
+        Person personByFirstAndLastName = personService.getPersonByFirstAndLastName(firstName, lastName);
+        ZoneOffset zoneOffset = ZoneId.of("UTC").getRules().getOffset(LocalDateTime.now());
+
+        return new FloodStationDTO(
+                firstName,
+                lastName,
+                personByFirstAndLastName.getPhone(),
+                CalculateAge.calculateAge(LocalDate.parse(medicalRecordFromFirstAndLastName.getBirthdate(), CalculateAge.formatter).atStartOfDay().toInstant(zoneOffset)),
+                medicalRecordFromFirstAndLastName.getMedications(),
+                medicalRecordFromFirstAndLastName.getAllergies());
     }
 }

@@ -20,7 +20,11 @@ public class FirestationService {
                 .filter(station -> station.getStation() == number)
                 .collect(Collectors.toList());
     }
-
+    public List<Firestation> getFirestationFromList(List<Integer> stations) {
+        return databaseService.getFirestations().stream()
+                .filter(station -> stations.contains(station.getStation()))
+                .toList();
+    }
     public List<Firestation> getFirestationByAdress(String adress) {
         return databaseService.getFirestations().stream()
                 .filter(station -> station.getAddress().equals(adress))
